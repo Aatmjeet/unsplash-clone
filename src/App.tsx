@@ -62,7 +62,7 @@ function App() {
     <div>
       {previewState && (
         <div className="fixed flex z-20 justify-center items-center w-full h-full backdrop-blur-sm">
-          <div className=" max-w-md max-h-md">
+          <div className=" max-w-xs max-h-sm">
             <ImageCard
               imgSrc={previewContent.content.imgSrc}
               userName={previewContent.content.userName}
