@@ -3,9 +3,14 @@ import axios from "axios";
 import ImageCard from "../imageCard/card";
 import { Masonry, useInfiniteLoader } from "masonic";
 
-interface explorefeedprops {}
+interface explorefeedprops {
+  setPreviewState: (val: boolean) => void;
+  previewContent: object,
+}
 
 export default function ExploreFeed(props: explorefeedprops) {
+  const { previewContent, setPreviewState } = props;
+
   const clientToken = "8wqqT-o0APEHRm_epwquPJCa1cAzFNKvJ7VBLr0imwQ";
   const [pageNum, setPageNum] = useState<number>(1);
   const exploreURL = `https://api.unsplash.com/photos/?per_page=30&client_id=${clientToken}`;
@@ -50,6 +55,8 @@ export default function ExploreFeed(props: explorefeedprops) {
       imageID: obj.id,
       sharingLink: obj.links.html,
       profileLink: obj.user.links.html,
+      likes: obj.likes,
+      altDes: obj.alt_description,
     });
   });
 
@@ -64,6 +71,8 @@ export default function ExploreFeed(props: explorefeedprops) {
       imageID,
       sharingLink,
       profileLink,
+      likes,
+      altDes,
     },
   }) => (
     <ImageCard
@@ -76,6 +85,11 @@ export default function ExploreFeed(props: explorefeedprops) {
       imageID={imageID}
       sharingLink={sharingLink}
       profileLink={profileLink}
+      likes={likes}
+      altDes={altDes}
+      previewContent={previewContent}
+      setPreviewState={setPreviewState}
+      isPreview={false}
     />
   );
 
@@ -89,13 +103,13 @@ export default function ExploreFeed(props: explorefeedprops) {
   const InfiniteMasonary = (props: any) => {
     const maybeLoadMore = useInfiniteLoader(fetchMoreItems, {
       isItemLoaded: (index, items) => !!items[index],
-      minimumBatchSize: 10,
+      minimumBatchSize: 30,
     });
     return (
       <Masonry
         items={items}
-        columnCount={2}
-        columnGutter={10}
+        columnCount={3}
+        columnGutter={15}
         // Sets the minimum column width to 172px
         columnWidth={200}
         // Pre-renders 5 windows worth of content

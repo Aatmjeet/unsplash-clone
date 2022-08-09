@@ -5,10 +5,12 @@ import { Masonry, useInfiniteLoader } from "masonic";
 
 interface searchfeedprops {
   searchParam: string;
+  setPreviewState: (val: boolean) => void;
+  previewContent: object;
 }
 
 export default function SearchFeed(props: searchfeedprops) {
-  const { searchParam } = props;
+  const { searchParam, previewContent, setPreviewState } = props;
 
   const clientToken = "8wqqT-o0APEHRm_epwquPJCa1cAzFNKvJ7VBLr0imwQ";
   const [pageNum, setPageNum] = useState<number>(1);
@@ -32,6 +34,9 @@ export default function SearchFeed(props: searchfeedprops) {
     getSearchData(searchURL + `&page=${pageNum}` + `&query=${searchParam}`);
   }, [searchParam]);
 
+  useEffect(() => {
+    console.log(searchContent);
+  }, [searchContent]);
 
   const items: any[] = [];
   searchContent.map((obj) => {
@@ -55,6 +60,8 @@ export default function SearchFeed(props: searchfeedprops) {
       imageID: obj.id,
       sharingLink: obj.links.html,
       profileLink: obj.user.links.html,
+      likes: obj.likes,
+      altDes: obj.alt_description,
     });
   });
 
@@ -69,6 +76,8 @@ export default function SearchFeed(props: searchfeedprops) {
       imageID,
       sharingLink,
       profileLink,
+      likes,
+      altDes
     },
   }) => (
     <ImageCard
@@ -81,6 +90,11 @@ export default function SearchFeed(props: searchfeedprops) {
       imageID={imageID}
       sharingLink={sharingLink}
       profileLink={profileLink}
+      likes={likes}
+      altDes={altDes}
+      previewContent={previewContent}
+      setPreviewState={setPreviewState}
+      isPreview={false}
     />
   );
 
@@ -94,13 +108,13 @@ export default function SearchFeed(props: searchfeedprops) {
   const InfiniteMasonary = (props: any) => {
     const maybeLoadMore = useInfiniteLoader(fetchMoreItems, {
       isItemLoaded: (index, items) => !!items[index],
-      minimumBatchSize: 10,
+      minimumBatchSize: 30,
     });
     return (
       <Masonry
         items={items}
-        columnCount={2}
-        columnGutter={10}
+        columnCount={3}
+        columnGutter={15}
         // Sets the minimum column width to 172px
         columnWidth={200}
         // Pre-renders 5 windows worth of content

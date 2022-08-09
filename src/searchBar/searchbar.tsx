@@ -32,6 +32,9 @@ export default function SearchBar(props: seachbarprops) {
       label="Search anything"
       value={searchQuery}
       onChange={(e) => searchBarUpdate(e.target.value)}
+      sx={{
+        width: 360,
+      }}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
