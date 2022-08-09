@@ -38,31 +38,31 @@ function App() {
 
   // custom margin that we are setting for out masonry
   const [margin, setMargin] = useState(10 * (window.innerWidth / 1920));
+  const [width, setWidth] = useState(window.innerWidth * 0.8);
+  const [height, setHeight] = useState(window.innerHeight * 0.8)
 
   // this function will update out margin on call
-  const updateMargin = () => {
+  const updateMarginAndDimensions = () => {
     setMargin(10 * (window.innerWidth / 1920));
+    setWidth(0.8 * window.innerWidth);
+    setHeight(0.8 * window.innerHeight);
   };
 
   // Using this to update margin when called
   useEffect(() => {
-    window.addEventListener("resize", updateMargin);
-    return () => window.removeEventListener("resize", updateMargin);
+    window.addEventListener("resize", updateMarginAndDimensions);
+    return () => window.removeEventListener("resize", updateMarginAndDimensions);
   });
 
   // this parameter stores the search query string
   const [searchParam, setSearchParam] = useState<string>("");
 
-  // Thhs is a our seach output tab, we display this when content is "search"
-  const SearchOutput = (props: any) => {
-    return <div> </div>;
-  };
 
   return (
     <div>
       {previewState && (
         <div className="fixed flex z-20 justify-center items-center w-full h-full backdrop-blur-sm">
-          <div className=" max-w-xs max-h-sm">
+          <div className="w-9/12 h-full overflow-y-scroll">
             <ImageCard
               imgSrc={previewContent.content.imgSrc}
               userName={previewContent.content.userName}
@@ -84,7 +84,7 @@ function App() {
       )}
       <ToastContainer />
       <div className="w-full fixed flex h-20 z-10 bg-gray-200 justify-between">
-        <div className="pt-5 pl-8">
+        <div className="pt-5 pl-5">
           <img
             src={process.env.PUBLIC_URL + "/logo512.png"}
             alt="unsplash-logo"

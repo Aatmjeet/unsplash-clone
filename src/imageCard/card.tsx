@@ -67,7 +67,7 @@ export default function ImageCard(props: imgcprops) {
     isPreview,
   } = props;
 
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
