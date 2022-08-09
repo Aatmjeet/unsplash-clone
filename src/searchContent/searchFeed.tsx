@@ -113,7 +113,7 @@ export default function SearchFeed(props: searchfeedprops) {
     return (
       <Masonry
         items={items}
-        columnCount={3}
+        columnCount={2}
         columnGutter={15}
         // Sets the minimum column width to 172px
         columnWidth={200}
