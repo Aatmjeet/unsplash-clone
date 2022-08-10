@@ -20,6 +20,9 @@ function App() {
   // Content for the popup image card
   const [previewState, setPreviewState] = useState<boolean>(false);
 
+  // This is how we get content from our card,
+  // This is done without re-rendering our App.
+  // eslint-disable-next-line
   const [previewContent, setPreviewContent] = useState({
     content: {
       imgSrc: "",
@@ -38,48 +41,44 @@ function App() {
 
   // custom margin that we are setting for out masonry
   const [margin, setMargin] = useState(10 * (window.innerWidth / 1920));
-  const [width, setWidth] = useState(window.innerWidth * 0.8);
-  const [height, setHeight] = useState(window.innerHeight * 0.8)
 
   // this function will update out margin on call
-  const updateMarginAndDimensions = () => {
+  const updateMargin = () => {
     setMargin(10 * (window.innerWidth / 1920));
-    setWidth(0.8 * window.innerWidth);
-    setHeight(0.8 * window.innerHeight);
   };
 
   // Using this to update margin when called
   useEffect(() => {
-    window.addEventListener("resize", updateMarginAndDimensions);
-    return () => window.removeEventListener("resize", updateMarginAndDimensions);
+    window.addEventListener("resize", updateMargin);
+    return () => window.removeEventListener("resize", updateMargin);
   });
 
   // this parameter stores the search query string
   const [searchParam, setSearchParam] = useState<string>("");
 
-
   return (
     <div>
       {previewState && (
-        <div className="fixed flex z-20 justify-center items-center w-full h-full backdrop-blur-sm">
-          <div className="w-9/12 h-full overflow-y-scroll">
-            <ImageCard
-              imgSrc={previewContent.content.imgSrc}
-              userName={previewContent.content.userName}
-              userProfile={previewContent.content.userProfile}
-              upDate={previewContent.content.upDate}
-              description={previewContent.content.description}
-              downloadLink={previewContent.content.downloadLink}
-              imageID={previewContent.content.imageID}
-              sharingLink={previewContent.content.sharingLink}
-              profileLink={previewContent.content.profileLink}
-              likes={previewContent.content.likes}
-              altDes={previewContent.content.altDes}
-              previewContent={previewContent}
-              setPreviewState={setPreviewState}
-              isPreview={true}
-            />
-          </div>
+        <div
+          className="fixed flex z-20 justify-center w-full h-full backdrop-blur-sm"
+          style={{ alignItems: "center" }}
+        >
+          <ImageCard
+            imgSrc={previewContent.content.imgSrc}
+            userName={previewContent.content.userName}
+            userProfile={previewContent.content.userProfile}
+            upDate={previewContent.content.upDate}
+            description={previewContent.content.description}
+            downloadLink={previewContent.content.downloadLink}
+            imageID={previewContent.content.imageID}
+            sharingLink={previewContent.content.sharingLink}
+            profileLink={previewContent.content.profileLink}
+            likes={previewContent.content.likes}
+            altDes={previewContent.content.altDes}
+            previewContent={previewContent}
+            setPreviewState={setPreviewState}
+            isPreview={true}
+          />
         </div>
       )}
       <ToastContainer />

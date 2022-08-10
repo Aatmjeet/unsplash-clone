@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import TextField from "@mui/material/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -8,6 +8,12 @@ interface seachbarprops {
   setSearchParam: (val: string) => void;
   setContentType: (val: "explore" | "search") => void;
 }
+
+/**
+ * This is our custom search bar
+ * Working: After any change in the input box, we update the search query
+ * And once the "search" button is pressed, we copy that to out state props
+ */
 
 export default function SearchBar(props: seachbarprops) {
   const { setSearchParam, setContentType } = props;

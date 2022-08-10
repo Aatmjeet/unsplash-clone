@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -18,6 +18,11 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 // toast
 import { toast } from "react-toastify";
 
+
+/**
+ * Expand more is used to to display a custom button,
+ * which hides the unnecessory information
+ */
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -67,12 +72,36 @@ export default function ImageCard(props: imgcprops) {
     isPreview,
   } = props;
 
-  const [expanded, setExpanded] = useState(true);
 
+  /**
+   * Important: Following functionality monitors change in window size
+   * and according to that sets the value of height of the preview card.
+   * Since we are dealing with big sized images, this helps in controlling overflow
+   */
+  const [height, setHeight] = useState(window.innerHeight * 0.6);
+
+  const updateHeight = () => {
+    setHeight(0.6 * window.innerHeight);
+  };
+  // Using this to update height of preview when the browser window is resized
+  useEffect(() => {
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  });
+
+
+  /**
+   * Following is to change the state of dropdown to show
+   * alternative description
+   */
+  const [expanded, setExpanded] = useState(true);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  /***
+   * this is our custom toast used to toast redirect and downloading updates
+   */
   const customtoast = (message: string) =>
     toast.success(message, {
       position: "top-center",
@@ -83,6 +112,8 @@ export default function ImageCard(props: imgcprops) {
       draggable: true,
     });
 
+
+  // Fucntion to copy post link to clipboard
   const copyLinkToClip = () => {
     const el = document.createElement("input");
     el.value = sharingLink;
@@ -93,6 +124,7 @@ export default function ImageCard(props: imgcprops) {
     customtoast("Link copied to clipboard!");
   };
 
+  // Fucntion to download Image
   const downloadImage = () => {
     //custom Toast
     customtoast("Downloading image!");
@@ -121,6 +153,17 @@ export default function ImageCard(props: imgcprops) {
         link.parentNode?.removeChild(link);
       });
   };
+
+  /***
+   * Our custom card component
+   * We are using this to
+   * 1. display post on Explore and search feed
+   * 2. display image preview
+   * 
+   * Note: we are passing "isPreview" everytime we are rendering this component
+   * This is a regular boolean given to check, how actually the card is being used.
+   * This helps in adding re-usability to our component
+   */
   return (
     <Card>
       <CardHeader
@@ -151,7 +194,7 @@ export default function ImageCard(props: imgcprops) {
         subheader={`uploaded on ${upDate}`}
       />
       <CardMedia
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer", maxHeight: isPreview ? `${height}px` : "auto" }}
         onClick={() => {
           if (!isPreview) {
             setPreviewState(true);
